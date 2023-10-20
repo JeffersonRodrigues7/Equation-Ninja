@@ -1268,6 +1268,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minOperators: 1
   maxOperators: 5
+  level: 0
 --- !u!4 &1443291926
 Transform:
   m_ObjectHideFlags: 0

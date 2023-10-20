@@ -7,70 +7,79 @@ using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class Answer : MonoBehaviour
 {
-    [SerializeField] private float fallSpeed = 100f; // Velocidade com que a resposta cai (ajustar para corresponder à altura do canvas)
-    [SerializeField] private bool isCorrectAnswer = true; // Indica se esta é a resposta correta
+    [SerializeField] private float fallSpeed = 100f; // Velocidade com que a resposta cai (ajustar para corresponder ï¿½ altura do canvas)
+    [SerializeField] private bool isCorrectAnswer = true; // Indica se esta ï¿½ a resposta correta
 
     private TextMeshProUGUI value; // Texto da resposta
-    private TextMeshProUGUI punctuation; // Texto da pontuação
+    private TextMeshProUGUI punctuation; // Texto da pontuaï¿½ï¿½o
 
-    private float canvasHeight; // Altura do canvas onde a resposta é exibida
+    private float canvasHeight; // Altura do canvas onde a resposta ï¿½ exibida
+
+    private bool canMove = true; //Determina se o nÃºmero pode comeÃ§ar a cair
 
     private void Awake()
     {
-        value = GetComponent<TextMeshProUGUI>(); // Obtém o componente TextMeshProUGUI da resposta
+        value = GetComponent<TextMeshProUGUI>(); // Obtï¿½m o componente TextMeshProUGUI da resposta
     }
 
     private void Start()
     {
-        punctuation = GameObject.Find("Punctuation").GetComponent<TextMeshProUGUI>(); // Obtém o componente TextMeshProUGUI da pontuação
+        punctuation = GameObject.Find("Punctuation").GetComponent<TextMeshProUGUI>(); // Obtï¿½m o componente TextMeshProUGUI da pontuaï¿½ï¿½o
 
-        // Obtém a altura do canvas onde a resposta é exibida
+        // Obtï¿½m a altura do canvas onde a resposta ï¿½ exibida
         Canvas canvas = GetComponentInParent<Canvas>();
         canvasHeight = canvas.GetComponent<RectTransform>().rect.height;
     }
 
     private void Update()
     {
-        // Move a resposta para baixo com a velocidade especificada
-        transform.Translate(Vector3.down * fallSpeed * Time.deltaTime);
-
-        // Quando a resposta atinge a parte inferior e é a resposta correta, atualiza a expressão no GameManager
-        if (transform.position.y < 0f && isCorrectAnswer)
+        if(canMove)
         {
-            isCorrectAnswer = false; // Marca a resposta como usada
-            GameManager.instance.setExpression(); // Chama a função setExpression no GameManager para atualizar a expressão
+            // Move a resposta para baixo com a velocidade especificada
+            transform.Translate(Vector3.down * fallSpeed * Time.deltaTime);
+
+            // Quando a resposta atinge a parte inferior e ï¿½ a resposta correta, atualiza a expressï¿½o no GameManager
+            if (transform.position.y < 0f && isCorrectAnswer)
+            {
+                canMove = false;
+                isCorrectAnswer = false; // Marca a resposta como usada
+                GameManager.instance.setExpression(); // Chama a funï¿½ï¿½o setExpression no GameManager para atualizar a expressï¿½o
+                canMove = true;
+            }
         }
+
     }
 
-    // Configura a resposta com o valor e se é a resposta correta
+    // Configura a resposta com o valor e se ï¿½ a resposta correta
     public void setAnswer(int _value, bool _isCorrectAnswer)
     {
         if (value != null)
         {
             value.text = _value.ToString(); // Define o texto da resposta como o valor
-            isCorrectAnswer = _isCorrectAnswer; // Define se é a resposta correta
-            transform.position = new Vector3(transform.position.x, canvasHeight, transform.position.z); // Define a posição da resposta no topo do canvas
+            isCorrectAnswer = _isCorrectAnswer; // Define se ï¿½ a resposta correta
+            transform.position = new Vector3(transform.position.x, canvasHeight, transform.position.z); // Define a posiï¿½ï¿½o da resposta no topo do canvas
         }
         else
         {
-            Debug.LogError($"Objeto value ainda não foi carregado"); // Mostra um erro se o objeto "value" não estiver carregado
+            Debug.LogError($"Objeto value ainda nï¿½o foi carregado"); // Mostra um erro se o objeto "value" nï¿½o estiver carregado
         }
     }
 
     // Chamada quando o mouse entra na resposta
     public void OnPointerEnter()
     {
+        canMove = false;
         if (isCorrectAnswer)
         {
             Debug.Log($"<color=green>Resposta correta!</color>");
 
             if (int.TryParse(punctuation.text, out int actualPunctuation))
             {
-                punctuation.text = (actualPunctuation + 1).ToString(); // Incrementa a pontuação se a resposta for correta
+                punctuation.text = (actualPunctuation + 1).ToString(); // Incrementa a pontuaï¿½ï¿½o se a resposta for correta
             }
             else
             {
-                Debug.LogError($"Falha ao converter texto de pontuação: {punctuation.text} para inteiro"); // Mostra um erro se a conversão da pontuação falhar
+                Debug.LogError($"Falha ao converter texto de pontuaï¿½ï¿½o: {punctuation.text} para inteiro"); // Mostra um erro se a conversï¿½o da pontuaï¿½ï¿½o falhar
             }
         }
         else
@@ -78,6 +87,7 @@ public class Answer : MonoBehaviour
             Debug.Log($"<color=red>Resposta incorreta!</color>"); // Mensagem para resposta incorreta
         }
 
-        GameManager.instance.setExpression(); // Atualiza a expressão no GameManager
+        GameManager.instance.setExpression(); // Atualiza a expressï¿½o no GameManager
+        canMove = true;
     }
 }
