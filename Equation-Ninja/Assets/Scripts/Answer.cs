@@ -1,21 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class Answer : MonoBehaviour
 {
-    [SerializeField] private float fallSpeed = 100f; // Velocidade com que a resposta cai (ajustar para corresponder � altura do canvas)
+    
     [SerializeField] private bool isCorrectAnswer = true; // Indica se esta � a resposta correta
+    [SerializeField] private bool canMove = false; //Determina se o número pode começar a cair
 
     private TextMeshProUGUI value; // Texto da resposta
-    private TextMeshProUGUI punctuation; // Texto da pontua��o
 
     private float canvasHeight; // Altura do canvas onde a resposta � exibida
+    private float fallSpeed = 50f; // Velocidade com que a resposta cai
+    private bool isAnswerRight = true; //Vai retornar ao GameManager se a resposta está certa ou errada
 
-    private bool canMove = true; //Determina se o número pode começar a cair
 
     private void Awake()
     {
@@ -24,11 +21,10 @@ public class Answer : MonoBehaviour
 
     private void Start()
     {
-        punctuation = GameObject.Find("Punctuation").GetComponent<TextMeshProUGUI>(); // Obt�m o componente TextMeshProUGUI da pontua��o
-
         // Obt�m a altura do canvas onde a resposta � exibida
         Canvas canvas = GetComponentInParent<Canvas>();
         canvasHeight = canvas.GetComponent<RectTransform>().rect.height;
+        transform.position = new Vector3(transform.position.x, canvasHeight, transform.position.z);
     }
 
     private void Update()
@@ -44,20 +40,21 @@ public class Answer : MonoBehaviour
                 canMove = false;
                 isCorrectAnswer = false; // Marca a resposta como usada
                 GameManager.instance.setExpression(); // Chama a fun��o setExpression no GameManager para atualizar a express�o
-                canMove = true;
             }
         }
 
     }
 
     // Configura a resposta com o valor e se � a resposta correta
-    public void setAnswer(int _value, bool _isCorrectAnswer)
+    public void setAnswer(int _value, bool _isCorrectAnswer, float _fallSpeed)
     {
         if (value != null)
         {
             value.text = _value.ToString(); // Define o texto da resposta como o valor
             isCorrectAnswer = _isCorrectAnswer; // Define se � a resposta correta
             transform.position = new Vector3(transform.position.x, canvasHeight, transform.position.z); // Define a posi��o da resposta no topo do canvas
+            fallSpeed = _fallSpeed;
+            canMove = true;
         }
         else
         {
@@ -69,25 +66,16 @@ public class Answer : MonoBehaviour
     public void OnPointerEnter()
     {
         canMove = false;
+        
         if (isCorrectAnswer)
         {
-            Debug.Log($"<color=green>Resposta correta!</color>");
-
-            if (int.TryParse(punctuation.text, out int actualPunctuation))
-            {
-                punctuation.text = (actualPunctuation + 1).ToString(); // Incrementa a pontua��o se a resposta for correta
-            }
-            else
-            {
-                Debug.LogError($"Falha ao converter texto de pontua��o: {punctuation.text} para inteiro"); // Mostra um erro se a convers�o da pontua��o falhar
-            }
+            isAnswerRight = true;
         }
         else
         {
-            Debug.Log($"<color=red>Resposta incorreta!</color>"); // Mensagem para resposta incorreta
+            isAnswerRight = false;
         }
 
-        GameManager.instance.setExpression(); // Atualiza a express�o no GameManager
-        canMove = true;
+        GameManager.instance.updatePunctuation(isAnswerRight); // Atualiza a express�o no GameManager
     }
 }

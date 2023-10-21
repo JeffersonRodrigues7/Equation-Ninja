@@ -188,7 +188,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 84809109}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 282.9608, y: 230.73181, z: 368.03937}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -207,12 +207,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaffac0b9f9a87c44b8012fbbb30991e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  operatorsQtd: 1
+  operators: 1
+  minNumberValue: 0
+  maxNumberValue: 5
+  parentheses: 1
+  WrongAnswerRangePorcentage: 50
   fallSpeed: 50
   expressionByLevel: 3
-  WrongAnswerRangePorcentage: 50
   maxWrongAnswers: 5
+  ponctuationValue: 0
   qtdExpressionPassed: 0
   gameLevel: 0
+  correctedAnswers: 0
   wrongAnswers: 0
 --- !u!114 &84809112
 MonoBehaviour:
@@ -494,7 +501,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -563, y: -276}
+  m_AnchoredPosition: {x: -563, y: 0}
   m_SizeDelta: {x: 275.2155, y: 71.964}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &239709954
@@ -606,8 +613,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f28f60644a4e85d4fac1b488e447241a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fallSpeed: 100
   isCorrectAnswer: 1
+  canMove: 0
 --- !u!114 &239709957
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -834,7 +841,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 560, y: -276}
+  m_AnchoredPosition: {x: 560, y: 0}
   m_SizeDelta: {x: 292.116, y: 91.597}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &547680809
@@ -878,8 +885,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f28f60644a4e85d4fac1b488e447241a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fallSpeed: 100
   isCorrectAnswer: 0
+  canMove: 0
 --- !u!114 &547680811
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1689,8 +1696,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac637ab3939edb740955dc48a3196940, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minOperators: 1
-  maxOperators: 5
 --- !u!4 &1443291926
 Transform:
   m_ObjectHideFlags: 0
