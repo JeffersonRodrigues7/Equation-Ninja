@@ -14,4 +14,10 @@ public class ChangeSceneButton : MonoBehaviour
     {
         SceneManager.LoadScene("Credits");
     }
+
+    // Este método é chamado para voltar ao menu inicial
+    public void LoadMainMenu()
+    {
+        SceneManager.LoadScene("Menu");
+    }
 }
