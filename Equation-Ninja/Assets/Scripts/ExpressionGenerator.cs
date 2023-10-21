@@ -49,10 +49,10 @@ public class ExpressionGenerator : MonoBehaviour
     {
         int missingOperators = operatorsQtd;
 
-        Debug.Log($"<color=black>GERANDO UMA NOVA EXPRESS�O!</color>");
+        //Debug.Log($"<color=black>GERANDO UMA NOVA EXPRESS�O!</color>");
 
         // Registra o n�mero de operadores que a express�o ter�.
-        Debug.Log("N�mero de Opera��es Geradas: " + missingOperators);
+        //Debug.Log("N�mero de Opera��es Geradas: " + missingOperators);
 
         // Gera a express�o com a quantidade de operadores faltantes.
         string randomExpression = createRandomExpression(missingOperators, operators, minNumberValue, maxNumberValue, parentheses).Replace(" ", "");

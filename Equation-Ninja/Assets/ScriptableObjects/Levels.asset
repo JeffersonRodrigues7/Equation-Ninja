@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c7464072da23944ca157856680e5d14, type: 3}
+  m_Name: Levels
+  m_EditorClassIdentifier: 
+  parameters:
+  - level: 0
+    operatorsQtd: 1
+    operators: 1
+    minNumberValue: 0
+    maxNumberValue: 5
+    parentheses: 0
+    WrongAnswerRangePorcentage: 50
+    fallSpeed: 50
+  - level: 1
+    operatorsQtd: 1
+    operators: 2
+    minNumberValue: 0
+    maxNumberValue: 5
+    parentheses: 0
+    WrongAnswerRangePorcentage: 50
+    fallSpeed: 50
+  - level: 2
+    operatorsQtd: 1
+    operators: 3
+    minNumberValue: 0
+    maxNumberValue: 5
+    parentheses: 0
+    WrongAnswerRangePorcentage: 50
+    fallSpeed: 50
+  - level: 3
+    operatorsQtd: 1
+    operators: 3
+    minNumberValue: 0
+    maxNumberValue: 5
+    parentheses: 0
+    WrongAnswerRangePorcentage: 45
+    fallSpeed: 50
+  - level: 4
+    operatorsQtd: 2
+    operators: 3
+    minNumberValue: 0
+    maxNumberValue: 5
+    parentheses: 0
+    WrongAnswerRangePorcentage: 45
+    fallSpeed: 50

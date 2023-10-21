@@ -12,6 +12,7 @@ public class Answer : MonoBehaviour
     private float canvasHeight; // Altura do canvas onde a resposta � exibida
     private float fallSpeed = 50f; // Velocidade com que a resposta cai
     private bool isAnswerRight = true; //Vai retornar ao GameManager se a resposta está certa ou errada
+    private bool gameOver = false;
 
 
     private void Awake()
@@ -25,11 +26,14 @@ public class Answer : MonoBehaviour
         Canvas canvas = GetComponentInParent<Canvas>();
         canvasHeight = canvas.GetComponent<RectTransform>().rect.height;
         transform.position = new Vector3(transform.position.x, canvasHeight, transform.position.z);
+        gameOver = false;
     }
 
     private void Update()
     {
-        if(canMove)
+        if (gameOver) return;
+
+        if (canMove)
         {
             // Move a resposta para baixo com a velocidade especificada
             transform.Translate(Vector3.down * fallSpeed * Time.deltaTime);
@@ -65,6 +69,8 @@ public class Answer : MonoBehaviour
     // Chamada quando o mouse entra na resposta
     public void OnPointerEnter()
     {
+        if (gameOver) return;
+
         canMove = false;
         
         if (isCorrectAnswer)
@@ -77,5 +83,10 @@ public class Answer : MonoBehaviour
         }
 
         GameManager.instance.updatePunctuation(isAnswerRight); // Atualiza a express�o no GameManager
+    }
+
+    public void setGameOver()
+    {
+        gameOver = true;
     }
 }

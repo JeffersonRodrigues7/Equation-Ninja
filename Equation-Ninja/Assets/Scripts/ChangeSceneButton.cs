@@ -20,4 +20,10 @@ public class ChangeSceneButton : MonoBehaviour
     {
         SceneManager.LoadScene("Menu");
     }
+
+    // Este método é chamado para chamar a tela de gameOver
+    public void LoadGameOver()
+    {
+        SceneManager.LoadScene("GameOver");
+    }
 }

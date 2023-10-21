@@ -2,6 +2,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,8 +16,26 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float fallSpeed = 50f; // Velocidade com que a resposta cai (ajustar para corresponder � altura do canvas)
 
     [Header("Variáveis de Design")]
+    [SerializeField] private Levels levels;  //ScriptableObject com os parametros por level
     [SerializeField] private int expressionByLevel = 3; //Vai armazenar a quantidade de expressões por level
-    [SerializeField] private int maxWrongAnswers = 5; //Vai armazenar a quantidade de erros do jogador
+    [SerializeField] private int maxWrongAnswers = 3; //Vai armazenar a quantidade de erros do jogador
+
+    [Header("Scripts")]
+    [SerializeField] private ExpressionGenerator expressionGenerator; // Refer�ncia ao gerador de express�es
+    [SerializeField] private Answer answer1; // Referencia a primeira resposta
+    [SerializeField] private Answer answer2; // Referencia a segunda resposta
+
+    [Header("Textos")]
+    [SerializeField] private TextMeshProUGUI expressionTextMeshPro; // Referencia ao texto da express�o
+    [SerializeField] private TextMeshProUGUI punctuationTextMeshPro; // Texto da pontua��o
+    [SerializeField] private TextMeshProUGUI levelTextMeshPro; // Texto ddo level
+    [SerializeField] private GameObject inputField;//Input onde o jogador irá digitar seu nome
+    [SerializeField] private GameObject finalPonctuationText;//Texto com a pontuação final do jogador
+
+    [Header("Imagens")]
+    [SerializeField] private Image[] booksLife; // Vai armazenar as imafgens de vida
+    [SerializeField] private Sprite book; // Vai armazenar imagem do livro
+    [SerializeField] private Sprite bookLost; // Vai armazenar imagem do livro perdido
 
     [Header("Variáveis apenas de visualização")]
     [SerializeField] private int ponctuationValue = 0; //Vai armazenar a quantidade de erros do jogador
@@ -26,14 +45,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int wrongAnswers = 0; //Vai armazenar a quantidade de erros do jogador
 
     public static GameManager instance; // Referencia est�tica ao GameManager para facil acesso
-
-    private TextMeshProUGUI expression; // Referencia ao texto da express�o
-    private ExpressionGenerator expressionGenerator; // Refer�ncia ao gerador de express�es
-
-    private Answer answer1; // Referencia a primeira resposta
-    private Answer answer2; // Referencia a segunda resposta
-
-    private TextMeshProUGUI punctuation; // Texto da pontua��o
+    private Parameters[] levelsParameters; //atalho para o array de parametros por level
 
     private void Awake()
     {
@@ -47,16 +59,31 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        
     }
 
     private void Start()
     {
-        // Encontra e obtem as referencias aos objetos do Unity
-        expression = GameObject.Find("Expression")?.GetComponent<TextMeshProUGUI>();
-        expressionGenerator = GameObject.Find("ExpressionGenerator")?.GetComponent<ExpressionGenerator>();
-        answer1 = GameObject.Find("Answer1")?.GetComponent<Answer>();
-        answer2 = GameObject.Find("Answer2")?.GetComponent<Answer>();
-        punctuation = GameObject.Find("Punctuation").GetComponent<TextMeshProUGUI>(); // Obt�m o componente TextMeshProUGUI da pontua��o
+        inputField.SetActive(false);//Desativa input no inicio do jogo
+        finalPonctuationText.SetActive(false);//Desativa pontuação final no inicio do jogo
+
+        //Setando valores iniciais
+        foreach (Image bookLife in booksLife)
+        {
+            bookLife.sprite = book;
+        }
+
+        ponctuationValue = 0; //Vai armazenar a quantidade de erros do jogador
+        qtdExpressionPassed = 0; //Vai armazenar a quantidade de expressões que passaram
+        gameLevel = 0; //Vai armazenar o level atual
+        correctedAnswers = 0; //Vai armazenar a quantidade de erros do jogador
+        wrongAnswers = 0; //Vai armazenar a quantidade de erros do jogador
+
+        punctuationTextMeshPro.text = ponctuationValue.ToString();
+        levelTextMeshPro.text = "Level: " + gameLevel.ToString();
+
+        levelsParameters = levels.parameters;
 
         // Define a expressao inicial
         setExpression();
@@ -65,10 +92,24 @@ public class GameManager : MonoBehaviour
     public void setExpression()
     {
         // Verifica se todas as refer�ncias necess�rias foram encontradas
-        if (expression == null) { Debug.LogError($"Nao foi encontrado um local para inserir a expressao"); return; }
+        if (expressionTextMeshPro == null) { Debug.LogError($"Nao foi encontrado um local para inserir a expressao"); return; }
         if (expressionGenerator == null) { Debug.LogError($"Nao foi encontrado o gerador de expressao"); return; }
         if (answer1 == null) { Debug.LogError($"Nao foi encontrado Objeto de resposta 01"); return; }
         if (answer2 == null) { Debug.LogError($"Nao foi encontrado Objeto de resposta 02"); return; }
+
+        /** Este condicional verifica se o nível atual do jogo está dentro dos limites definidos em levelsParameters e, se estiver, 
+        * ele configura várias variáveis com os parâmetros associados a esse nível.*/
+        if (levels != null && gameLevel < levelsParameters.Length)
+        {
+            Debug.Log("GameLevel: " + gameLevel + " - Level Length" + levelsParameters.Length);
+            operatorsQtd = levelsParameters[gameLevel].operatorsQtd;
+            operators = levelsParameters[gameLevel].operators;
+            minNumberValue = levelsParameters[gameLevel].minNumberValue;
+            maxNumberValue = levelsParameters[gameLevel].maxNumberValue;
+            parentheses = levelsParameters[gameLevel].parentheses;
+            WrongAnswerRangePorcentage = levelsParameters[gameLevel].WrongAnswerRangePorcentage;
+            fallSpeed = levelsParameters[gameLevel].fallSpeed;
+        }
 
         // Obt�m uma express�o matem�tica do gerador
         string expresstionText = expressionGenerator.getExpression(operatorsQtd, operators, minNumberValue, maxNumberValue, parentheses);
@@ -76,7 +117,7 @@ public class GameManager : MonoBehaviour
         // Avalia a express�o e obtem a resposta correta
         if (ExpressionEvaluator.Evaluate(expresstionText, out int correctAnswer))
         {
-            expression.text = expresstionText;//Coloca expressão na tela
+            expressionTextMeshPro.text = expresstionText;//Coloca expressão na tela
 
             // Calcula a faixa de variacao para as respostas incorretas
             int WrongAnswerRange = (int)(correctAnswer * (WrongAnswerRangePorcentage / 100));
@@ -87,7 +128,7 @@ public class GameManager : MonoBehaviour
                 WrongAnswerRange = Random.Range(1, 5);
             }
 
-            Debug.Log($"WrongAnswerRange: {WrongAnswerRange}");
+           // Debug.Log($"WrongAnswerRange: {WrongAnswerRange}");
 
             // Gera uma resposta incorreta dentro da faixa de variacao
             int wrongAnswer = Random.Range(correctAnswer - WrongAnswerRange, correctAnswer + WrongAnswerRange + 1);
@@ -101,7 +142,7 @@ public class GameManager : MonoBehaviour
             // Escolhe aleatoriamente qual resposta e a correta
             int correctAnswerObject = Random.Range(1, 3); // Se 1, a Answer 1 sera correta; se 2, a Answer 2 ser� correta
 
-            Debug.Log($"Resposta correta: {correctAnswer} - Resposta errada: {wrongAnswer}");
+            //Debug.Log($"Resposta correta: {correctAnswer} - Resposta errada: {wrongAnswer}");
 
             // Define as respostas nas respectivas Answer objetos
             if (correctAnswerObject == 1)
@@ -114,13 +155,6 @@ public class GameManager : MonoBehaviour
                 answer1.setAnswer(wrongAnswer, false, fallSpeed);
                 answer2.setAnswer(correctAnswer, true, fallSpeed);
             }
-
-            //Aumentando quantidade de expressões que passaram e verificando se devemos aumentar de level
-            qtdExpressionPassed++;
-            if(qtdExpressionPassed % expressionByLevel == 0)
-            {
-                gameLevel++;
-            }        
         }
 
         else
@@ -130,27 +164,53 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //Atualiza pontuação do jogador
     public void updatePunctuation(bool isCorrectAnswer)
     {
         if (isCorrectAnswer)
         {
             Debug.Log($"<color=green>Resposta correta!</color>");
 
-            if (int.TryParse(punctuation.text, out int actualPunctuation))
+            if (int.TryParse(punctuationTextMeshPro.text, out int actualPunctuation))
             {
                 ponctuationValue = (actualPunctuation + 1);
-                punctuation.text = ponctuationValue.ToString(); // Incrementa a pontua��o se a resposta for correta
+                punctuationTextMeshPro.text = ponctuationValue.ToString(); // Incrementa a pontua��o se a resposta for correta
                 correctedAnswers++;
             }
             else
             {
-                Debug.LogError($"Falha ao converter texto de pontua��o: {punctuation.text} para inteiro"); // Mostra um erro se a convers�o da pontua��o falhar
+                Debug.LogError($"Falha ao converter texto de pontua��o: {punctuationTextMeshPro.text} para inteiro"); // Mostra um erro se a convers�o da pontua��o falhar
             }
         }
-        else
+        else //Jogador errou
         {
+
+            if(wrongAnswers >= maxWrongAnswers) //GameOver
+            {
+                //Abaixo vamos parar o movimento dos números e impedir que a contagem continue e habilitar os objetos de input e placar final
+                answer1.setGameOver();
+                answer2.setGameOver();
+                finalPonctuationText.SetActive(true);
+                inputField.SetActive(true);
+                finalPonctuationText.GetComponent<TextMeshProUGUI>().text = "Placar Final: " + ponctuationValue;
+            }
+
+            //Setando imagem de erro
+            if(wrongAnswers < booksLife.Length)
+            {
+                booksLife[wrongAnswers].sprite = bookLost;
+            }
+
             Debug.Log($"<color=red>Resposta incorreta!</color>"); // Mensagem para resposta incorreta
             wrongAnswers++;
+        }
+
+        //Aumentando quantidade de expressões que passaram e verificando se devemos aumentar de level
+        qtdExpressionPassed++;
+        if (qtdExpressionPassed % expressionByLevel == 0)
+        {
+            gameLevel++;
+            levelTextMeshPro.text = "Level: " + gameLevel.ToString();
         }
 
         setExpression();
