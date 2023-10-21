@@ -4,60 +4,60 @@ using Random = UnityEngine.Random;
 
 public class ExpressionGenerator : MonoBehaviour
 {
-    [SerializeField] private int minOperators = 2;  // Número mínimo de operadores na expressão gerada.
-    [SerializeField] private int maxOperators = 5;  // Número máximo de operadores na expressão gerada.
+    [SerializeField] private int minOperators = 2;  // Nï¿½mero mï¿½nimo de operadores na expressï¿½o gerada.
+    [SerializeField] private int maxOperators = 5;  // Nï¿½mero mï¿½ximo de operadores na expressï¿½o gerada.
 
-    private string[] operators = { "+", "-", "*" };  // Operadores matemáticos possíveis.
-    private string[] openedSymbols = { "(", " " };        // Símbolos de abertura (parênteses ou "nada").
-    private string[] closedSymbols = { ")", " " };        // Símbolos de fechamento (parênteses ou "nada").
+    private string[] operators = { "+", "-", "*" };  // Operadores matemï¿½ticos possï¿½veis.
+    private string[] openedSymbols = { "(", " " };        // Sï¿½mbolos de abertura (parï¿½nteses ou "nada").
+    private string[] closedSymbols = { ")", " " };        // Sï¿½mbolos de fechamento (parï¿½nteses ou "nada").
 
-    // Função que gera uma expressão matemática aleatória com a quantidade especificada de operadores faltantes.
+    // Funï¿½ï¿½o que gera uma expressï¿½o matemï¿½tica aleatï¿½ria com a quantidade especificada de operadores faltantes.
     private string createRandomExpression(int missingOperators)
     {
         if (missingOperators == 0)
         {
-            // Se não há mais operadores faltantes, retorna um número aleatório entre 1 e 9 como um operando.
+            // Se nï¿½o hï¿½ mais operadores faltantes, retorna um nï¿½mero aleatï¿½rio entre 1 e 9 como um operando.
             return Random.Range(1, 10).ToString();
         }
         else
         {
-            // Caso contrário, gera um símbolo de abertura e fechamento (parênteses ou "nada") aleatório.
+            // Caso contrï¿½rio, gera um sï¿½mbolo de abertura e fechamento (parï¿½nteses ou "nada") aleatï¿½rio.
             int option = Random.Range(0, 2);
             string openSymbol = openedSymbols[option];
             string closeSymbol = closedSymbols[option];
 
             string expression = "";
 
-            // Adiciona o símbolo de abertura à expressão.
+            // Adiciona o sï¿½mbolo de abertura ï¿½ expressï¿½o.
             expression += openSymbol;
 
-            // Adiciona um número aleatório entre 0 e 9 à expressão como um operando.
+            // Adiciona um nï¿½mero aleatï¿½rio entre 0 e 9 ï¿½ expressï¿½o como um operando.
             expression += Random.Range(0, 10);
 
-            // Adiciona um operador aleatório à expressão.
+            // Adiciona um operador aleatï¿½rio ï¿½ expressï¿½o.
             expression += operators[Random.Range(0, operators.Length)];
 
-            // Recursivamente, gera a próxima parte da expressão com um operador a menos.
+            // Recursivamente, gera a prï¿½xima parte da expressï¿½o com um operador a menos.
             expression += createRandomExpression(missingOperators - 1);
 
-            // Adiciona o símbolo de fechamento correspondente ao de abertura.
+            // Adiciona o sï¿½mbolo de fechamento correspondente ao de abertura.
             expression += closeSymbol;
 
             return expression;
         }
     }
 
-    // Função pública que gera e exibe uma expressão aleatória com o número de operadores dentro dos limites especificados.
+    // Funï¿½ï¿½o pï¿½blica que gera e exibe uma expressï¿½o aleatï¿½ria com o nï¿½mero de operadores dentro dos limites especificados.
     public string getExpression()
     {
         int missingOperators = Random.Range(minOperators, maxOperators);
 
-        Debug.Log($"<color=black>GERANDO UMA NOVA EXPRESSÃO!</color>");
+        Debug.Log($"<color=black>GERANDO UMA NOVA EXPRESSï¿½O!</color>");
 
-        // Registra o número de operadores que a expressão terá.
-        Debug.Log("Número de Operações Geradas: " + missingOperators);
+        // Registra o nï¿½mero de operadores que a expressï¿½o terï¿½.
+        Debug.Log("Nï¿½mero de Operaï¿½ï¿½es Geradas: " + missingOperators);
 
-        // Gera a expressão com a quantidade de operadores faltantes.
+        // Gera a expressï¿½o com a quantidade de operadores faltantes.
         string randomExpression = createRandomExpression(missingOperators).Replace(" ", "");
 
         return randomExpression;

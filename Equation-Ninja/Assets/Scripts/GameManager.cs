@@ -4,23 +4,33 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private float WrongAnswerRangePorcentage = 5; // Porcentagem da variação para as respostas incorretas
+    [Header("Changeable")]
+    [SerializeField] private float fallSpeed = 50f; // Velocidade com que a resposta cai (ajustar para corresponder ï¿½ altura do canvas)
+    [SerializeField] private int expressionByLevel = 3; //Vai armazenar a quantidade de expressÃµes por level
+    [SerializeField] private float WrongAnswerRangePorcentage = 5; // Porcentagem da variaï¿½ï¿½o para as respostas incorretas
+    [SerializeField] private int maxWrongAnswers = 5; //Vai armazenar a quantidade de erros do jogador
 
-    public static GameManager instance; // Referência estática ao GameManager para fácil acesso
 
-    private TextMeshProUGUI expression; // Referência ao texto da expressão
-    private ExpressionGenerator expressionGenerator; // Referência ao gerador de expressões
+    [Header("Not Changeable")]
+    [SerializeField] private int qtdExpressionPassed = 0; //Vai armazenar a quantidade de expressÃµes que passaram
+    [SerializeField] private int gameLevel = 0; //Vai armazenar o level atual
+    [SerializeField] private int wrongAnswers = 0; //Vai armazenar a quantidade de erros do jogador
 
-    private Answer answer1; // Referência à primeira resposta
-    private Answer answer2; // Referência à segunda resposta
+    public static GameManager instance; // Referï¿½ncia estï¿½tica ao GameManager para fï¿½cil acesso
+
+    private TextMeshProUGUI expression; // Referï¿½ncia ao texto da expressï¿½o
+    private ExpressionGenerator expressionGenerator; // Referï¿½ncia ao gerador de expressï¿½es
+
+    private Answer answer1; // Referï¿½ncia ï¿½ primeira resposta
+    private Answer answer2; // Referï¿½ncia ï¿½ segunda resposta
 
     private void Awake()
     {
-        // Certifica-se de que só exista uma instância do GameManager
+        // Certifica-se de que sï¿½ exista uma instï¿½ncia do GameManager
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject); // Mantém o GameManager ativo entre cenas
+            DontDestroyOnLoad(gameObject); // Mantï¿½m o GameManager ativo entre cenas
         }
         else
         {
@@ -30,35 +40,35 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        // Encontra e obtém as referências aos objetos do Unity
+        // Encontra e obtï¿½m as referï¿½ncias aos objetos do Unity
         expression = GameObject.Find("Expression")?.GetComponent<TextMeshProUGUI>();
         expressionGenerator = GameObject.Find("ExpressionGenerator")?.GetComponent<ExpressionGenerator>();
         answer1 = GameObject.Find("Answer1")?.GetComponent<Answer>();
         answer2 = GameObject.Find("Answer2")?.GetComponent<Answer>();
 
-        // Define a expressão inicial
+        // Define a expressï¿½o inicial
         setExpression();
     }
 
     public void setExpression()
     {
-        // Verifica se todas as referências necessárias foram encontradas
-        if (expression == null) { Debug.LogError($"Não foi encontrado um local para inserir a expressão"); return; }
-        if (expressionGenerator == null) { Debug.LogError($"Não foi encontrado o gerador de expressão"); return; }
-        if (answer1 == null) { Debug.LogError($"Não foi encontrado Objeto de resposta 01"); return; }
-        if (answer2 == null) { Debug.LogError($"Não foi encontrado Objeto de resposta 02"); return; }
+        // Verifica se todas as referï¿½ncias necessï¿½rias foram encontradas
+        if (expression == null) { Debug.LogError($"Nï¿½o foi encontrado um local para inserir a expressï¿½o"); return; }
+        if (expressionGenerator == null) { Debug.LogError($"Nï¿½o foi encontrado o gerador de expressï¿½o"); return; }
+        if (answer1 == null) { Debug.LogError($"Nï¿½o foi encontrado Objeto de resposta 01"); return; }
+        if (answer2 == null) { Debug.LogError($"Nï¿½o foi encontrado Objeto de resposta 02"); return; }
 
-        // Obtém uma expressão matemática do gerador
+        // Obtï¿½m uma expressï¿½o matemï¿½tica do gerador
         string expresstionText = expressionGenerator.getExpression();
         expression.text = expresstionText;
 
-        // Avalia a expressão e obtém a resposta correta
+        // Avalia a expressï¿½o e obtï¿½m a resposta correta
         if (ExpressionEvaluator.Evaluate(expresstionText, out int correctAnswer))
         {
-            // Calcula a faixa de variação para as respostas incorretas
+            // Calcula a faixa de variaï¿½ï¿½o para as respostas incorretas
             int WrongAnswerRange = (int)(correctAnswer * (WrongAnswerRangePorcentage / 100));
 
-            // Se a faixa de variação for zero, defina um valor mínimo
+            // Se a faixa de variaï¿½ï¿½o for zero, defina um valor mï¿½nimo
             if (WrongAnswerRange == 0)
             {
                 WrongAnswerRange = Random.Range(1, 5);
@@ -66,7 +76,7 @@ public class GameManager : MonoBehaviour
 
             Debug.Log($"WrongAnswerRange: {WrongAnswerRange}");
 
-            // Gera uma resposta incorreta dentro da faixa de variação
+            // Gera uma resposta incorreta dentro da faixa de variaï¿½ï¿½o
             int wrongAnswer = Random.Range(correctAnswer - WrongAnswerRange, correctAnswer + WrongAnswerRange + 1);
 
             // Garante que a resposta incorreta seja diferente da correta
@@ -75,8 +85,8 @@ public class GameManager : MonoBehaviour
                 wrongAnswer = Random.Range(correctAnswer - WrongAnswerRange, correctAnswer + WrongAnswerRange + 1);
             }
 
-            // Escolhe aleatoriamente qual resposta é a correta
-            int correctAnswerObject = Random.Range(1, 3); // Se 1, a Answer 1 será correta; se 2, a Answer 2 será correta
+            // Escolhe aleatoriamente qual resposta ï¿½ a correta
+            int correctAnswerObject = Random.Range(1, 3); // Se 1, a Answer 1 serï¿½ correta; se 2, a Answer 2 serï¿½ correta
 
             Debug.Log($"Resposta correta: {correctAnswer} - Resposta errada: {wrongAnswer}");
 
@@ -91,11 +101,19 @@ public class GameManager : MonoBehaviour
                 answer1.setAnswer(wrongAnswer, false);
                 answer2.setAnswer(correctAnswer, true);
             }
+
+            //Aumentando quantidade de expressÃµes que passaram e verificando se devemos aumentar de level
+            qtdExpressionPassed++;
+            if(qtdExpressionPassed % expressionByLevel == 0)
+            {
+                gameLevel++;
+            }        
         }
+
         else
         {
-            Debug.Log($"Erro ao tentar gerar expressão matemática a partir da string {expresstionText}, vamos tentar novamente.");
-            setExpression(); // Tenta novamente se houver um erro na geração da expressão
+            Debug.Log($"Erro ao tentar gerar expressï¿½o matemï¿½tica a partir da string {expresstionText}, vamos tentar novamente.");
+            setExpression(); // Tenta novamente se houver um erro na geraï¿½ï¿½o da expressï¿½o
         }
     }
 }
