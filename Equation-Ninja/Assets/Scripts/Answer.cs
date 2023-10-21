@@ -7,11 +7,12 @@ public class Answer : MonoBehaviour
     [SerializeField] private bool isCorrectAnswer = true; // Indica se esta � a resposta correta
     [SerializeField] private bool canMove = false; //Determina se o número pode começar a cair
 
+    private GameControl gameControll;
     private TextMeshProUGUI value; // Texto da resposta
 
     private float canvasHeight; // Altura do canvas onde a resposta � exibida
     private float fallSpeed = 50f; // Velocidade com que a resposta cai
-    private bool isAnswerRight = true; //Vai retornar ao GameManager se a resposta está certa ou errada
+    private bool isAnswerRight = true; //Vai retornar ao GameControl se a resposta está certa ou errada
     private bool gameOver = false;
 
 
@@ -22,6 +23,8 @@ public class Answer : MonoBehaviour
 
     private void Start()
     {
+        gameControll = GameObject.Find("GameControl").GetComponent<GameControl>();
+
         // Obt�m a altura do canvas onde a resposta � exibida
         Canvas canvas = GetComponentInParent<Canvas>();
         canvasHeight = canvas.GetComponent<RectTransform>().rect.height;
@@ -38,12 +41,12 @@ public class Answer : MonoBehaviour
             // Move a resposta para baixo com a velocidade especificada
             transform.Translate(Vector3.down * fallSpeed * Time.deltaTime);
 
-            // Quando a resposta atinge a parte inferior e � a resposta correta, atualiza a express�o no GameManager
+            // Quando a resposta atinge a parte inferior e � a resposta correta, atualiza a express�o no GameControl
             if (transform.position.y < 0f && isCorrectAnswer)
             {
                 canMove = false;
                 isCorrectAnswer = false; // Marca a resposta como usada
-                GameManager.instance.setExpression(); // Chama a fun��o setExpression no GameManager para atualizar a express�o
+                gameControll.setExpression(); // Chama a fun��o setExpression no GameControl para atualizar a express�o
             }
         }
 
@@ -82,7 +85,7 @@ public class Answer : MonoBehaviour
             isAnswerRight = false;
         }
 
-        GameManager.instance.updatePunctuation(isAnswerRight); // Atualiza a express�o no GameManager
+        gameControll.updatePunctuation(isAnswerRight); // Atualiza a express�o no GameControl
     }
 
     public void setGameOver()

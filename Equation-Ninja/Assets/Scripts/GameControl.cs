@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour
+public class GameControl : MonoBehaviour
 {
     [Header("Variáveis de Dificuldade")]
     [SerializeField] private int operatorsQtd = 1; //Armazena a quantidade de operadores
@@ -44,24 +44,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int correctedAnswers = 0; //Vai armazenar a quantidade de erros do jogador
     [SerializeField] private int wrongAnswers = 0; //Vai armazenar a quantidade de erros do jogador
 
-    public static GameManager instance; // Referencia est�tica ao GameManager para facil acesso
     private Parameters[] levelsParameters; //atalho para o array de parametros por level
-
-    private void Awake()
-    {
-        // Certifica-se de que s� exista uma inst�ncia do GameManager
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject); // Mant�m o GameManager ativo entre cenas
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-
-        
-    }
 
     private void Start()
     {
