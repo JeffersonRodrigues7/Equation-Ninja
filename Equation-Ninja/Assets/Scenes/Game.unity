@@ -171,6 +171,7 @@ GameObject:
   m_Component:
   - component: {fileID: 84809110}
   - component: {fileID: 84809111}
+  - component: {fileID: 84809112}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -206,6 +207,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WrongAnswerRangePorcentage: 50
+--- !u!114 &84809112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 84809109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f98e6bbce7499b94b8923357dad59609, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cursorTexture: {fileID: 2800000, guid: f9d7db6406d7aad42bf8b04d52d0069f, type: 3}
+  hotSpot: {x: 0, y: 0}
 --- !u!1 &152692009
 GameObject:
   m_ObjectHideFlags: 0
