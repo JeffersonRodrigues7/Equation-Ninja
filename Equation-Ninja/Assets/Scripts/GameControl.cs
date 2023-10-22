@@ -46,6 +46,7 @@ public class GameControl : MonoBehaviour
     [SerializeField] private int qtdExpressionPassed = 0; //Vai armazenar a quantidade de expressões que passaram
     [SerializeField] private int gameLevel = 0; //Vai armazenar o level atual
     [SerializeField] private int correctedAnswers = 0; //Vai armazenar a quantidade de erros do jogador
+    [SerializeField] private int followCorrectedAnswers = 0; //Respostas Corretas seguidas
     [SerializeField] private int wrongAnswers = 0; //Vai armazenar a quantidade de erros do jogador
     [SerializeField] private int bonusType = 0; //Armazena quantos pontos esse lvl fornece ao jogador caso acerte a resposta
     [SerializeField] private int levelPoints = 0; //Armazena quantos pontos esse lvl fornece ao jogador caso acerte a resposta
@@ -199,6 +200,14 @@ public class GameControl : MonoBehaviour
 
             if (int.TryParse(punctuationTextMeshPro.text, out int currentlyPunctuation))
             {
+                //Caso o jogador acerte 10x seguidas, ganhará mais 10 pontos acrescidos
+                followCorrectedAnswers++;
+                if(followCorrectedAnswers >= 10)
+                {
+                    increasedPoints += 10;
+                    followCorrectedAnswers = 0;
+                }
+
                 ponctuationValue = (currentlyPunctuation + (levelPoints + increasedPoints) * bonusMultiplication);
                 punctuationTextMeshPro.text = ponctuationValue.ToString(); // Incrementa a pontua��o se a resposta for correta
                 correctedAnswers++;
@@ -229,6 +238,7 @@ public class GameControl : MonoBehaviour
 
             Debug.Log($"<color=red>Resposta incorreta!</color>"); // Mensagem para resposta incorreta
             wrongAnswers++;
+            followCorrectedAnswers = 0;
         }
 
         //Aumentando quantidade de expressões que passaram e verificando se devemos aumentar de level
