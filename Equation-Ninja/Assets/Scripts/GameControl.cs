@@ -1,8 +1,10 @@
+using System.Text.RegularExpressions;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Windows;
 
 public class GameControl : MonoBehaviour
 {
@@ -29,8 +31,10 @@ public class GameControl : MonoBehaviour
     [SerializeField] private TextMeshProUGUI expressionTextMeshPro; // Referencia ao texto da express�o
     [SerializeField] private TextMeshProUGUI punctuationTextMeshPro; // Texto da pontua��o
     [SerializeField] private TextMeshProUGUI levelTextMeshPro; // Texto ddo level
-    [SerializeField] private GameObject inputField;//Input onde o jogador irá digitar seu nome
-    [SerializeField] private GameObject finalPonctuationText;//Texto com a pontuação final do jogador
+    [SerializeField] private GameObject inputField;//Input onde o jogador irá digitar seu name
+    [SerializeField] private GameObject finalPonctuation;//Texto com a pontuação final do jogador
+    [SerializeField] private TextMeshProUGUI finalPonctuationValue;//Texto com a pontuação final do jogador
+    [SerializeField] private GameObject BonusText;//Texto com a palavra Bonus
 
     [Header("Imagens")]
     [SerializeField] private Image[] booksLife; // Vai armazenar as imafgens de vida
@@ -43,13 +47,24 @@ public class GameControl : MonoBehaviour
     [SerializeField] private int gameLevel = 0; //Vai armazenar o level atual
     [SerializeField] private int correctedAnswers = 0; //Vai armazenar a quantidade de erros do jogador
     [SerializeField] private int wrongAnswers = 0; //Vai armazenar a quantidade de erros do jogador
+    [SerializeField] private int bonusType = 0; //Armazena quantos pontos esse lvl fornece ao jogador caso acerte a resposta
+    [SerializeField] private int levelPoints = 0; //Armazena quantos pontos esse lvl fornece ao jogador caso acerte a resposta
+    [SerializeField] private bool bonusActive = false; //Armazena se o bônus está ativo ou não
+    [SerializeField] private int bonusMultiplication = 1; //Armazena o quanto o bônus irá multiplicar a qtd de pontos ganha
+    [SerializeField] private Color textColor = Color.white; //Armazena o quanto o bônus irá multiplicar a qtd de pontos ganha
 
     private Parameters[] levelsParameters; //atalho para o array de parametros por level
+    private string[] bonusRegex = { @"\*", //Tivermos um símbolo de "*" na string:
+                                @"\*{2,}", //Tivermos 2 ou mais símbolos de "*" na string:
+                            @"\*{2,}.*7+", //Tivermos 2 ou mais símbolos de "*" na string e um ou mais números 7:
+                        @"\*{2,}.*[-]?7+" //Tivermos 2 ou mais símbolos de "*" na string e um ou mais números 7 ou -7:
+                                };
 
     private void Start()
     {
         inputField.SetActive(false);//Desativa input no inicio do jogo
-        finalPonctuationText.SetActive(false);//Desativa pontuação final no inicio do jogo
+        finalPonctuation.SetActive(false);//Desativa pontuação final no inicio do jogo
+        BonusText.SetActive(false);
 
         //Setando valores iniciais
         foreach (Image bookLife in booksLife)
@@ -84,7 +99,7 @@ public class GameControl : MonoBehaviour
         * ele configura várias variáveis com os parâmetros associados a esse nível.*/
         if (levels != null && gameLevel < levelsParameters.Length)
         {
-            Debug.Log("GameLevel: " + gameLevel + " - Level Length" + levelsParameters.Length);
+            levelPoints = levelsParameters[gameLevel].points;
             operatorsQtd = levelsParameters[gameLevel].operatorsQtd;
             operators = levelsParameters[gameLevel].operators;
             minNumberValue = levelsParameters[gameLevel].minNumberValue;
@@ -92,15 +107,43 @@ public class GameControl : MonoBehaviour
             parentheses = levelsParameters[gameLevel].parentheses;
             WrongAnswerRangePorcentage = levelsParameters[gameLevel].WrongAnswerRangePorcentage;
             fallSpeed = levelsParameters[gameLevel].fallSpeed;
+            bonusType = levelsParameters[gameLevel].bonusType;
         }
 
         // Obt�m uma express�o matem�tica do gerador
         string expresstionText = expressionGenerator.getExpression(operatorsQtd, operators, minNumberValue, maxNumberValue, parentheses);
 
+        Debug.Log("Bônus Type: " + bonusType + " - " + Regex.IsMatch(expresstionText, bonusRegex[0]) + " - " + expresstionText);
+
+        if (bonusType == 1 && Regex.IsMatch(expresstionText, bonusRegex[0])) bonusActive = true;
+        else if (bonusType == 2 && Regex.IsMatch(expresstionText, bonusRegex[1])) bonusActive = true;
+        else if (bonusType == 3 && Regex.IsMatch(expresstionText, bonusRegex[2])) bonusActive = true;
+        else if (bonusType == 4 && Regex.IsMatch(expresstionText, bonusRegex[3])) bonusActive = true;
+        else bonusActive = false;
+
+        Debug.Log("O bonus será ativado: " + bonusActive);
+        //Definindo alguns detalhes caso estejamos diante de um bônus
+        if (bonusActive)
+        {
+            BonusText.SetActive(true);
+            bonusMultiplication = 2;
+            textColor = Color.yellow;
+        }
+        else
+        {
+            BonusText.SetActive(false);
+            bonusMultiplication = 1;
+            textColor = Color.white;
+        }
+
+        /**Capturando Bônus se existir*/
+
         // Avalia a express�o e obtem a resposta correta
         if (ExpressionEvaluator.Evaluate(expresstionText, out int correctAnswer))
         {
             expressionTextMeshPro.text = expresstionText;//Coloca expressão na tela
+
+            expressionTextMeshPro.color = textColor;//Cor do texto
 
             // Calcula a faixa de variacao para as respostas incorretas
             int WrongAnswerRange = (int)(correctAnswer * (WrongAnswerRangePorcentage / 100));
@@ -130,13 +173,13 @@ public class GameControl : MonoBehaviour
             // Define as respostas nas respectivas Answer objetos
             if (correctAnswerObject == 1)
             {
-                answer1.setAnswer(correctAnswer, true, fallSpeed);
-                answer2.setAnswer(wrongAnswer, false, fallSpeed);
+                answer1.setAnswer(correctAnswer, true, fallSpeed, textColor);
+                answer2.setAnswer(wrongAnswer, false, fallSpeed, textColor);
             }
             else
             {
-                answer1.setAnswer(wrongAnswer, false, fallSpeed);
-                answer2.setAnswer(correctAnswer, true, fallSpeed);
+                answer1.setAnswer(wrongAnswer, false, fallSpeed, textColor);
+                answer2.setAnswer(correctAnswer, true, fallSpeed, textColor);
             }
         }
 
@@ -148,15 +191,15 @@ public class GameControl : MonoBehaviour
     }
 
     //Atualiza pontuação do jogador
-    public void updatePunctuation(bool isCorrectAnswer)
+    public void updatePunctuation(bool isCorrectAnswer, int increasedPoints)
     {
         if (isCorrectAnswer)
         {
             Debug.Log($"<color=green>Resposta correta!</color>");
 
-            if (int.TryParse(punctuationTextMeshPro.text, out int actualPunctuation))
+            if (int.TryParse(punctuationTextMeshPro.text, out int currentlyPunctuation))
             {
-                ponctuationValue = (actualPunctuation + 1);
+                ponctuationValue = (currentlyPunctuation + (levelPoints + increasedPoints) * bonusMultiplication);
                 punctuationTextMeshPro.text = ponctuationValue.ToString(); // Incrementa a pontua��o se a resposta for correta
                 correctedAnswers++;
             }
@@ -173,9 +216,9 @@ public class GameControl : MonoBehaviour
                 //Abaixo vamos parar o movimento dos números e impedir que a contagem continue e habilitar os objetos de input e placar final
                 answer1.setGameOver();
                 answer2.setGameOver();
-                finalPonctuationText.SetActive(true);
+                finalPonctuation.SetActive(true);
                 inputField.SetActive(true);
-                finalPonctuationText.GetComponent<TextMeshProUGUI>().text = "Placar Final: " + ponctuationValue;
+                finalPonctuationValue.text = ponctuationValue.ToString();
             }
 
             //Setando imagem de erro

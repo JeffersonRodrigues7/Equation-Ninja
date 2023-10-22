@@ -1,20 +1,20 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using TMPro;
 using UnityEngine;
 
-public class LeadboardScrollViewText : MonoBehaviour
+public class SetRecord : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI leadboardText;
+    [SerializeField] private TextMeshProUGUI recordText;
 
     [Serializable]
     public class PlayerScore
     {
         public string name;
-        public int ponctuation; 
+        public int ponctuation;
     }
-
     private List<PlayerScore> playerScores = new List<PlayerScore>();
 
     private void Start()
@@ -51,20 +51,6 @@ public class LeadboardScrollViewText : MonoBehaviour
         // Ordena a lista de jogadores pelo valor da pontuação (do maior para o menor).
         playerScores.Sort((a, b) => b.ponctuation.CompareTo(a.ponctuation));
 
-        // Exibe os dados na tela
-        showLeaderboard();
-    }
-
-    // Exibe os dados na tela
-    private void showLeaderboard()
-    {
-        for (int i = 0; i < playerScores.Count; i++)
-        {
-            // Cria uma entrada formatada com o índice, a pontuação e o nome
-            string input = $"{i + 1}) {playerScores[i].ponctuation} - {playerScores[i].name}\n";
-
-            // Adiciona a entrada ao TextMeshProUGUI
-            leadboardText.text += input;
-        }
+        recordText.text = "Recorde: " + playerScores[0].ponctuation;
     }
 }

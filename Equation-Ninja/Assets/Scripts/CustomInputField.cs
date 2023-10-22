@@ -1,10 +1,14 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System.IO;
 
 public class CustomInputField : MonoBehaviour
 {
-    [SerializeField] private TMP_InputField inputField;//Input onde o jogador irá digitar seu nome
+    [SerializeField] private TMP_InputField inputField;//Input onde o jogador irá digitar seu name
+    [SerializeField] private TextMeshProUGUI finalPonctuation;//Input onde o jogador irá digitar seu name
+
+    private string filePath = "leaderboard.txt";
 
     private void Start()
     {
@@ -20,6 +24,14 @@ public class CustomInputField : MonoBehaviour
         // Verifica se o texto tem pelo menos 3 caracteres e se a tecla Enter foi pressionada.
         if (text.Length >= 3 && Input.GetKey(KeyCode.Return))
         {
+            filePath = Path.Combine(Application.dataPath, "Data/leaderboard.txt");
+
+            // Abrindo o arquivo em modo de adição e adicionadno novo jogador com pontuação
+            using (StreamWriter writer = File.AppendText(filePath))
+            {
+                writer.WriteLine(inputField.text + ";" + finalPonctuation.text);
+            }
+
             SceneManager.LoadScene("GameOver");
         }
         else

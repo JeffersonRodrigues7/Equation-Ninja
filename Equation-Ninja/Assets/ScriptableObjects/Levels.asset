@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parameters:
   - level: 0
+    points: 1
     operatorsQtd: 1
     operators: 1
     minNumberValue: 0
@@ -21,7 +22,9 @@ MonoBehaviour:
     parentheses: 0
     WrongAnswerRangePorcentage: 50
     fallSpeed: 50
+    bonusType: 0
   - level: 1
+    points: 2
     operatorsQtd: 1
     operators: 2
     minNumberValue: 0
@@ -29,7 +32,9 @@ MonoBehaviour:
     parentheses: 0
     WrongAnswerRangePorcentage: 50
     fallSpeed: 50
+    bonusType: 0
   - level: 2
+    points: 3
     operatorsQtd: 1
     operators: 3
     minNumberValue: 0
@@ -37,7 +42,9 @@ MonoBehaviour:
     parentheses: 0
     WrongAnswerRangePorcentage: 50
     fallSpeed: 50
+    bonusType: 1
   - level: 3
+    points: 4
     operatorsQtd: 1
     operators: 3
     minNumberValue: 0
@@ -45,7 +52,9 @@ MonoBehaviour:
     parentheses: 0
     WrongAnswerRangePorcentage: 45
     fallSpeed: 50
+    bonusType: 1
   - level: 4
+    points: 5
     operatorsQtd: 2
     operators: 3
     minNumberValue: 0
@@ -53,3 +62,4 @@ MonoBehaviour:
     parentheses: 0
     WrongAnswerRangePorcentage: 45
     fallSpeed: 50
+    bonusType: 1

@@ -26,4 +26,10 @@ public class ChangeSceneButton : MonoBehaviour
     {
         SceneManager.LoadScene("GameOver");
     }
+
+    // Este método é chamado para chamar a tela de LeaderBoard
+    public void LoadLeaderBoard()
+    {
+        SceneManager.LoadScene("LeaderBoard");
+    }
 }
