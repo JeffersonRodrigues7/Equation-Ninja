@@ -61,6 +61,8 @@ public class GameControl : MonoBehaviour
                         @"\*{2,}.*[-]?7+" //Tivermos 2 ou mais símbolos de "*" na string e um ou mais números 7 ou -7:
                                 };
 
+  
+
     private void Start()
     {
         inputField.SetActive(false);//Desativa input no inicio do jogo
@@ -217,6 +219,7 @@ public class GameControl : MonoBehaviour
                 Debug.LogError($"Falha ao converter texto de pontua��o: {punctuationTextMeshPro.text} para inteiro"); // Mostra um erro se a convers�o da pontua��o falhar
             }
         }
+
         else //Jogador errou
         {
 

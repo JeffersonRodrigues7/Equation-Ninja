@@ -719,6 +719,9 @@ MonoBehaviour:
   topCanvasPoints: 3
   mediumCanvasPoints: 2
   bottomCanvasPoints: 1
+  imgCerta: {fileID: 0}
+  imgErrada: {fileID: 0}
+  blade: {fileID: 1521274528}
 --- !u!114 &239709957
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1333,6 +1336,9 @@ MonoBehaviour:
   topCanvasPoints: 3
   mediumCanvasPoints: 2
   bottomCanvasPoints: 1
+  imgCerta: {fileID: 0}
+  imgErrada: {fileID: 0}
+  blade: {fileID: 1521274528}
 --- !u!114 &547680811
 MonoBehaviour:
   m_ObjectHideFlags: 0

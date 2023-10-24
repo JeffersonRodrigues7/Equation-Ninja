@@ -32,3 +32,4 @@ Teste;35
 Novaes;143
 Testando Bônus;294
 Dfgdfg;0
+Gustavo Alves;305

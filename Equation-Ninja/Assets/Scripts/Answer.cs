@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Answer : MonoBehaviour
 {
-    
+
     [SerializeField] private bool isCorrectAnswer = true; // Indica se esta � a resposta correta
     [SerializeField] private bool canMove = false; //Determina se o número pode começar a cair
     [SerializeField] private Transform TopPointer; //Caso o jogador acerte a resposta acima deste ponto ele ganhará + 3 pontos
@@ -20,6 +20,12 @@ public class Answer : MonoBehaviour
     private float fallSpeed = 50f; // Velocidade com que a resposta cai
     private bool isAnswerRight = true; //Vai retornar ao GameControl se a resposta está certa ou errada
     private bool gameOver = false;
+
+    public GameObject imgCerta;
+    public GameObject imgErrada;
+
+    public Blade blade;
+
 
 
     private void Awake()
@@ -42,10 +48,13 @@ public class Answer : MonoBehaviour
     {
         if (gameOver) return;
 
+
         if (canMove)
         {
             // Move a resposta para baixo com a velocidade especificada
+
             transform.Translate(Vector3.down * fallSpeed * Time.deltaTime);
+
 
             // Quando a resposta atinge a parte inferior e � a resposta correta, atualiza a express�o no GameControl
             if (transform.position.y < 0f && isCorrectAnswer)
@@ -83,11 +92,14 @@ public class Answer : MonoBehaviour
 
         if (gameOver) return;
 
-        canMove = false;
-        
+
+
         if (isCorrectAnswer)
         {
             isAnswerRight = true;
+
+
+
 
             if (transform.position.y >= TopPointer.position.y) //Jogador acertou na parte mais alta
                 increasedPoints = topCanvasPoints;
@@ -99,9 +111,14 @@ public class Answer : MonoBehaviour
         else
         {
             isAnswerRight = false;
+
         }
 
-        gameControll.updatePunctuation(isAnswerRight, increasedPoints); // Atualiza a express�o no GameControl
+        if (blade.isCutting)
+        {
+            canMove = false;
+            gameControll.updatePunctuation(isAnswerRight, increasedPoints); // Atualiza a express�o no GameControl
+        }
     }
 
     public void setGameOver()
