@@ -21,7 +21,7 @@ MonoBehaviour:
     maxNumberValue: 5
     parentheses: 0
     WrongAnswerRangePorcentage: 50
-    fallSpeed: 100
+    fallSpeed: 225
     bonusType: 0
   - level: 1
     points: 2
