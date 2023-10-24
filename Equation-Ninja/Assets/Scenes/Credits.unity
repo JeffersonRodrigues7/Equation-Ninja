@@ -654,7 +654,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 5.0122, y: -299.29}
+  m_AnchoredPosition: {x: 5.0122, y: -280}
   m_SizeDelta: {x: 1402.8, y: 174.97}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &781893385
@@ -1336,7 +1336,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 516, y: -290.58}
+  m_AnchoredPosition: {x: 516, y: -271.28998}
   m_SizeDelta: {x: 1402.8, y: 157.5423}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1699545495
@@ -1366,7 +1366,7 @@ MonoBehaviour:
     - Jefferson
     Leite Rodrigues Dantas (11076316)
 
-    - Gustavo Alves'
+    - Gustavo Alves de Lima (11103616)'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5bf41723c6f3d6c4485c57fc7174189f, type: 2}
   m_sharedMaterial: {fileID: 6345096223931824186, guid: 5bf41723c6f3d6c4485c57fc7174189f, type: 2}
