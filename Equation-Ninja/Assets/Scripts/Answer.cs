@@ -1,17 +1,20 @@
 using TMPro;
 using Unity.VisualScripting;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Answer : MonoBehaviour
 {
 
     [SerializeField] private bool isCorrectAnswer = true; // Indica se esta � a resposta correta
-    [SerializeField] private bool canMove = false; //Determina se o número pode começar a cair
+    [SerializeField] public bool canMove = false; //Determina se o número pode começar a cair
     [SerializeField] private Transform TopPointer; //Caso o jogador acerte a resposta acima deste ponto ele ganhará + 3 pontos
     [SerializeField] private Transform BottomPointer; //Caso o jogador acerte a resposta acima deste ponto ele ganhará + 2 pontos
     [SerializeField] private int topCanvasPoints = 3;
     [SerializeField] private int mediumCanvasPoints = 2;
     [SerializeField] private int bottomCanvasPoints = 1;
+    [SerializeField] private GameObject imgRisco;
 
     private GameControl gameControll;
     private TextMeshProUGUI value; // Texto da resposta
@@ -20,13 +23,7 @@ public class Answer : MonoBehaviour
     private float fallSpeed = 50f; // Velocidade com que a resposta cai
     private bool isAnswerRight = true; //Vai retornar ao GameControl se a resposta está certa ou errada
     private bool gameOver = false;
-
-    public GameObject imgCerta;
-    public GameObject imgErrada;
-
     public Blade blade;
-
-
 
     private void Awake()
     {
@@ -72,6 +69,7 @@ public class Answer : MonoBehaviour
     {
         if (value != null)
         {
+            imgRisco.SetActive(false);
             value.text = _value.ToString(); // Define o texto da resposta como o valor
             value.color = textColor;//Cor do texto
             isCorrectAnswer = _isCorrectAnswer; // Define se � a resposta correta
@@ -98,9 +96,6 @@ public class Answer : MonoBehaviour
         {
             isAnswerRight = true;
 
-
-
-
             if (transform.position.y >= TopPointer.position.y) //Jogador acertou na parte mais alta
                 increasedPoints = topCanvasPoints;
             else if (transform.position.y >= BottomPointer.position.y) //Jogador acertou no meio
@@ -116,8 +111,8 @@ public class Answer : MonoBehaviour
 
         if (blade.isCutting)
         {
-            canMove = false;
-            gameControll.updatePunctuation(isAnswerRight, increasedPoints); // Atualiza a express�o no GameControl
+            imgRisco.SetActive(true);
+            StartCoroutine(gameControll.createNewExpression(isAnswerRight, increasedPoints));
         }
     }
 
@@ -125,4 +120,6 @@ public class Answer : MonoBehaviour
     {
         gameOver = true;
     }
+
+
 }

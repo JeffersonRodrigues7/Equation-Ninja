@@ -5,6 +5,8 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Windows;
+using System.Collections;
+using System.Collections.Generic;
 
 public class GameControl : MonoBehaviour
 {
@@ -271,5 +273,16 @@ public class GameControl : MonoBehaviour
     {
         audioSource.clip = audioClip;
         audioSource.Play();
+    }
+
+    public IEnumerator createNewExpression(bool _isAnswerRight, int _increasedPoints)
+    {
+
+        answer1.canMove = false;
+        answer2.canMove = false;
+
+        yield return new WaitForSeconds(0.25f); // Aguarda 1 segundo antes de continuar.
+
+        updatePunctuation(_isAnswerRight, _increasedPoints); // Atualiza a express�o no GameControl
     }
 }
