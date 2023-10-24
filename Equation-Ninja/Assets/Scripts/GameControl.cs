@@ -41,6 +41,11 @@ public class GameControl : MonoBehaviour
     [SerializeField] private Sprite book; // Vai armazenar imagem do livro
     [SerializeField] private Sprite bookLost; // Vai armazenar imagem do livro perdido
 
+    [Header("Audios")]
+    [SerializeField] private AudioClip rightAnswerAudio; 
+    [SerializeField] private AudioClip wrongAnswerAudio; 
+    [SerializeField] private AudioClip bonusAnswerAudio; 
+
     [Header("Variáveis apenas de visualização")]
     [SerializeField] private int ponctuationValue = 0; //Vai armazenar a quantidade de erros do jogador
     [SerializeField] private int qtdExpressionPassed = 0; //Vai armazenar a quantidade de expressões que passaram
@@ -54,6 +59,8 @@ public class GameControl : MonoBehaviour
     [SerializeField] private int bonusMultiplication = 1; //Armazena o quanto o bônus irá multiplicar a qtd de pontos ganha
     [SerializeField] private Color textColor = Color.white; //Armazena o quanto o bônus irá multiplicar a qtd de pontos ganha
 
+    private AudioSource audioSource;
+    private AudioEffects audioEffects;
     private Parameters[] levelsParameters; //atalho para o array de parametros por level
     private string[] bonusRegex = { @"\*", //Tivermos um símbolo de "*" na string:
                                 @"\*{2,}", //Tivermos 2 ou mais símbolos de "*" na string:
@@ -68,6 +75,8 @@ public class GameControl : MonoBehaviour
         inputField.SetActive(false);//Desativa input no inicio do jogo
         finalPonctuation.SetActive(false);//Desativa pontuação final no inicio do jogo
         BonusText.SetActive(false);
+        audioEffects = FindAnyObjectByType<AudioEffects>();
+        audioSource = GetComponent<AudioSource>();
 
         //Setando valores iniciais
         foreach (Image bookLife in booksLife)
@@ -128,6 +137,7 @@ public class GameControl : MonoBehaviour
         //Definindo alguns detalhes caso estejamos diante de um bônus
         if (bonusActive)
         {
+            audioEffects.PlayAudio(bonusAnswerAudio);
             BonusText.SetActive(true);
             bonusMultiplication = 2;
             textColor = Color.yellow;
@@ -139,7 +149,7 @@ public class GameControl : MonoBehaviour
             textColor = Color.white;
         }
 
-        /**Capturando Bônus se existir*/
+
 
         // Avalia a express�o e obtem a resposta correta
         if (ExpressionEvaluator.Evaluate(expresstionText, out int correctAnswer))
@@ -203,6 +213,7 @@ public class GameControl : MonoBehaviour
             if (int.TryParse(punctuationTextMeshPro.text, out int currentlyPunctuation))
             {
                 //Caso o jogador acerte 10x seguidas, ganhará mais 10 pontos acrescidos
+                audioEffects.PlayAudio(rightAnswerAudio);
                 followCorrectedAnswers++;
                 if(followCorrectedAnswers >= 10)
                 {
@@ -222,9 +233,10 @@ public class GameControl : MonoBehaviour
 
         else //Jogador errou
         {
-
-            if(wrongAnswers >= maxWrongAnswers) //GameOver
+            audioEffects.PlayAudio(wrongAnswerAudio);
+            if (wrongAnswers >= maxWrongAnswers) //GameOver
             {
+                
                 //Abaixo vamos parar o movimento dos números e impedir que a contagem continue e habilitar os objetos de input e placar final
                 answer1.setGameOver();
                 answer2.setGameOver();
@@ -253,5 +265,11 @@ public class GameControl : MonoBehaviour
         }
 
         setExpression();
+    }
+
+    public void PlayAudio(AudioClip audioClip)
+    {
+        audioSource.clip = audioClip;
+        audioSource.Play();
     }
 }
