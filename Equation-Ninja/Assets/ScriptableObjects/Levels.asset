@@ -21,7 +21,7 @@ MonoBehaviour:
     maxNumberValue: 5
     parentheses: 0
     WrongAnswerRangePorcentage: 50
-    fallSpeed: 225
+    fallSpeed: 50
     bonusType: 0
   - level: 1
     points: 2
@@ -31,7 +31,7 @@ MonoBehaviour:
     maxNumberValue: 5
     parentheses: 0
     WrongAnswerRangePorcentage: 50
-    fallSpeed: 100
+    fallSpeed: 75
     bonusType: 0
   - level: 2
     points: 3
@@ -40,8 +40,8 @@ MonoBehaviour:
     minNumberValue: 0
     maxNumberValue: 5
     parentheses: 0
-    WrongAnswerRangePorcentage: 50
-    fallSpeed: 150
+    WrongAnswerRangePorcentage: 75
+    fallSpeed: 75
     bonusType: 1
   - level: 3
     points: 4
@@ -50,26 +50,136 @@ MonoBehaviour:
     minNumberValue: 0
     maxNumberValue: 5
     parentheses: 0
-    WrongAnswerRangePorcentage: 45
-    fallSpeed: 175
+    WrongAnswerRangePorcentage: 50
+    fallSpeed: 75
     bonusType: 1
   - level: 4
     points: 5
     operatorsQtd: 2
     operators: 3
     minNumberValue: 0
-    maxNumberValue: 7
+    maxNumberValue: 5
     parentheses: 0
-    WrongAnswerRangePorcentage: 45
-    fallSpeed: 200
+    WrongAnswerRangePorcentage: 50
+    fallSpeed: 75
     bonusType: 1
   - level: 5
     points: 5
     operatorsQtd: 2
     operators: 3
     minNumberValue: 0
-    maxNumberValue: 7
-    parentheses: 0
+    maxNumberValue: 5
+    parentheses: 1
     WrongAnswerRangePorcentage: 45
-    fallSpeed: 225
+    fallSpeed: 75
     bonusType: 1
+  - level: 6
+    points: 5
+    operatorsQtd: 2
+    operators: 3
+    minNumberValue: 0
+    maxNumberValue: 7
+    parentheses: 1
+    WrongAnswerRangePorcentage: 45
+    fallSpeed: 100
+    bonusType: 2
+  - level: 7
+    points: 5
+    operatorsQtd: 2
+    operators: 3
+    minNumberValue: 0
+    maxNumberValue: 7
+    parentheses: 1
+    WrongAnswerRangePorcentage: 45
+    fallSpeed: 100
+    bonusType: 2
+  - level: 8
+    points: 5
+    operatorsQtd: 2
+    operators: 3
+    minNumberValue: 0
+    maxNumberValue: 7
+    parentheses: 1
+    WrongAnswerRangePorcentage: 45
+    fallSpeed: 100
+    bonusType: 3
+  - level: 9
+    points: 5
+    operatorsQtd: 2
+    operators: 3
+    minNumberValue: 0
+    maxNumberValue: 7
+    parentheses: 1
+    WrongAnswerRangePorcentage: 45
+    fallSpeed: 125
+    bonusType: 3
+  - level: 10
+    points: 5
+    operatorsQtd: 2
+    operators: 3
+    minNumberValue: 0
+    maxNumberValue: 7
+    parentheses: 2
+    WrongAnswerRangePorcentage: 40
+    fallSpeed: 125
+    bonusType: 3
+  - level: 11
+    points: 5
+    operatorsQtd: 2
+    operators: 3
+    minNumberValue: -7
+    maxNumberValue: 7
+    parentheses: 2
+    WrongAnswerRangePorcentage: 40
+    fallSpeed: 125
+    bonusType: 4
+  - level: 12
+    points: 5
+    operatorsQtd: 3
+    operators: 3
+    minNumberValue: 0
+    maxNumberValue: 7
+    parentheses: 2
+    WrongAnswerRangePorcentage: 40
+    fallSpeed: 125
+    bonusType: 4
+  - level: 13
+    points: 5
+    operatorsQtd: 3
+    operators: 3
+    minNumberValue: 0
+    maxNumberValue: 7
+    parentheses: 2
+    WrongAnswerRangePorcentage: 40
+    fallSpeed: 150
+    bonusType: 4
+  - level: 14
+    points: 5
+    operatorsQtd: 3
+    operators: 3
+    minNumberValue: 0
+    maxNumberValue: 7
+    parentheses: 2
+    WrongAnswerRangePorcentage: 30
+    fallSpeed: 150
+    bonusType: 2
+  - level: 14
+    points: 5
+    operatorsQtd: 3
+    operators: 3
+    minNumberValue: 0
+    maxNumberValue: 10
+    parentheses: 2
+    WrongAnswerRangePorcentage: 30
+    fallSpeed: 175
+    bonusType: 2
+  - level: 14
+    points: 5
+    operatorsQtd: 3
+    operators: 3
+    minNumberValue: 0
+    maxNumberValue: 10
+    parentheses: 2
+    WrongAnswerRangePorcentage: 30
+    fallSpeed: 200
+    bonusType: 4
