@@ -127,7 +127,7 @@ MonoBehaviour:
     points: 5
     operatorsQtd: 2
     operators: 3
-    minNumberValue: -7
+    minNumberValue: 0
     maxNumberValue: 7
     parentheses: 2
     WrongAnswerRangePorcentage: 40
