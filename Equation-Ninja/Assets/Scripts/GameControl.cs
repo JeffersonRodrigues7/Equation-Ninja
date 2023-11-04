@@ -13,6 +13,7 @@ using System.Linq.Expressions;
 using Expression = Unity.VisualScripting.Dependencies.NCalc.Expression;
 using System.Data;
 using Random = UnityEngine.Random;
+using UnityEngine.SceneManagement;
 
 public class GameControl : MonoBehaviour
 {
@@ -252,6 +253,7 @@ public class GameControl : MonoBehaviour
                 finalPonctuation.SetActive(true);
                 inputField.SetActive(true);
                 finalPonctuationValue.text = ponctuationValue.ToString();
+                SceneManager.LoadScene("GameOver");
             }
 
             //Setando imagem de erro
