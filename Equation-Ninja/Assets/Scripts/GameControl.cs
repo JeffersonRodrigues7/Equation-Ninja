@@ -7,6 +7,12 @@ using UnityEngine.UI;
 using UnityEngine.Windows;
 using System.Collections;
 using System.Collections.Generic;
+using System;
+using Unity.VisualScripting.Dependencies.NCalc;
+using System.Linq.Expressions;
+using Expression = Unity.VisualScripting.Dependencies.NCalc.Expression;
+using System.Data;
+using Random = UnityEngine.Random;
 
 public class GameControl : MonoBehaviour
 {
@@ -69,8 +75,8 @@ public class GameControl : MonoBehaviour
                             @"\*{2,}.*7+", //Tivermos 2 ou mais símbolos de "*" na string e um ou mais números 7:
                         @"\*{2,}.*[-]?7+" //Tivermos 2 ou mais símbolos de "*" na string e um ou mais números 7 ou -7:
                                 };
+    System.Data.DataTable table = new System.Data.DataTable();
 
-  
 
     private void Start()
     {
@@ -152,10 +158,11 @@ public class GameControl : MonoBehaviour
         }
 
 
-
-        // Avalia a express�o e obtem a resposta correta
-        if (ExpressionEvaluator.Evaluate(expresstionText, out int correctAnswer))
+        try
         {
+            int correctAnswer = (int)table.Compute(expresstionText, "");
+            Debug.Log(correctAnswer);
+
             expressionTextMeshPro.text = expresstionText;//Coloca expressão na tela
 
             expressionTextMeshPro.color = textColor;//Cor do texto
@@ -169,7 +176,7 @@ public class GameControl : MonoBehaviour
                 WrongAnswerRange = Random.Range(1, 5);
             }
 
-           // Debug.Log($"WrongAnswerRange: {WrongAnswerRange}");
+            // Debug.Log($"WrongAnswerRange: {WrongAnswerRange}");
 
             // Gera uma resposta incorreta dentro da faixa de variacao
             int wrongAnswer = Random.Range(correctAnswer - WrongAnswerRange, correctAnswer + WrongAnswerRange + 1);
@@ -198,7 +205,7 @@ public class GameControl : MonoBehaviour
             }
         }
 
-        else
+        catch
         {
             Debug.Log($"Erro ao tentar gerar express�o matemática a partir da string {expresstionText}, vamos tentar novamente.");
             setExpression(); // Tenta novamente se houver um erro na gera��o da express�o
